@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Appliance {
+public:
+    string name;
+    double power;   // Power rating in Watts
+    double hours;   // Daily usage in hours
+
+    double calculateEnergy() {
+        return (power * hours) / 1000; // Energy in kWh
+    }
+};
+
+const int MAX_APPLIANCES = 20;
+Appliance appliances[MAX_APPLIANCES];
+int applianceCount = 0;
+
+int main() {
+    cout << "Electrical Load Monitoring System - Week 1 Setup\n";
+    return 0;
+}
