@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Appliance {
+public:
+    string name;
+    double power;
+    double hours;
+
+    double calculateEnergy() {
+        return (power * hours) / 1000;
+    }
+};
+
+const int MAX_APPLIANCES = 20;
+Appliance appliances[MAX_APPLIANCES];
+int applianceCount = 0;
+
+void registerAppliance() {
+    if (applianceCount >= MAX_APPLIANCES) {
+        cout << "Appliance limit reached!\n";
+        return;
+    }
+
+    Appliance a;
+
+    cout << "Enter appliance name: ";
+    cin.ignore();
+    getline(cin, a.name);
+
+    cout << "Enter power rating (Watts): ";
+    cin >> a.power;
+
+    cout << "Enter daily usage hours: ";
+    cin >> a.hours;
+
+    if (a.name.empty() || a.power <= 0 || a.hours < 0 || a.hours > 24) {
+        cout << "Invalid input. Try again.\n";
+        return;
+    }
+
+    appliances[applianceCount++] = a;
+    cout << "Appliance registered successfully!\n";
+}
+
+void viewAppliances() {
+    if (applianceCount == 0) {
+        cout << "No appliances registered.\n";
+        return;
+    }
+
+    for (int i = 0; i < applianceCount; i++) {
+        cout << i + 1 << ". "
+             << appliances[i].name
+             << " | Power: " << appliances[i].power
+             << " W | Hours: " << appliances[i].hours
+             << " | Energy: " << appliances[i].calculateEnergy()
+             << " kWh\n";
+    }
+}
+
+double calculateTotalEnergy() {
+    double total = 0;
+    for (int i = 0; i < applianceCount; i++) {
+        total += appliances[i].calculateEnergy();
+    }
+    return total;
+}
+
+void calculateBill() {
+    if (applianceCount == 0) {
+        cout << "No appliances registered.\n";
+        return;
+    }
+
+    double tariff;
+    cout << "Enter electricity tariff per kWh: ";
+    cin >> tariff;
+
+    if (tariff <= 0) {
+        cout << "Invalid tariff value.\n";
+        return;
+    }
+
+    double totalEnergy = calculateTotalEnergy();
+    double totalCost = totalEnergy * tariff;
+
+    cout << "\n--- Billing Summary ---\n";
+    cout << "Total Energy Consumed: " << totalEnergy << " kWh\n";
+    cout << "Tariff: " << tariff << " per kWh\n";
+    cout << "Total Electricity Cost: " << totalCost << endl;
+}
+
+int main() {
+    int choice;
+
+    do {
+        cout << "\n=== Electrical Load Monitoring & Billing System ===\n";
+        cout << "1. Register Appliance\n";
+        cout << "2. View Appliances\n";
+        cout << "3. Calculate Electricity Bill\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            registerAppliance();
+            break;
+        case 2:
+            viewAppliances();
+            break;
+        case 3:
+            calculateBill();
+            break;
+        case 4:
+            cout << "Exiting program...\n";
+            break;
+        default:
+            cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 4);
+
+    return 0;
+}
